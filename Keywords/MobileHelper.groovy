@@ -1,5 +1,6 @@
 
 import com.kms.katalon.core.annotation.Keyword
+import com.kms.katalon.core.configuration.RunConfiguration
 import com.kms.katalon.core.mobile.keyword.MobileBuiltInKeywords as Mobile
 import com.kms.katalon.core.mobile.keyword.internal.MobileDriverFactory
 import com.kms.katalon.core.testobject.MobileTestObject
@@ -10,6 +11,7 @@ import io.appium.java_client.AppiumDriver
 import mk.katalon.helpers.FailureHandler
 import mk.katalon.helpers.HealingInsightHelper
 import mk.katalon.helpers.LocatorStrategyBuilder
+import mk.katalon.helpers.MobileDriverHelper
 import mk.katalon.helpers.MobileElementFinder
 
 import com.kms.katalon.core.model.FailureHandling
@@ -42,7 +44,8 @@ class MobileHelper {
 		String proposedLocator = ""
 		String defaultLocator = ""
 		String testObjectPath = to.getObjectId()
-		def platform = MobileDriverFactory.getDevicePlatform()
+		//def platform = MobileDriverFactory.getDevicePlatform()
+		def platform = MobileDriverHelper.getDeviceOS()
 		AppiumDriver driver = MobileDriverFactory.getDriver()
 		def locators = MobileElementFinder.extractLocatorsFromTestObject(to)
 		def strategies = LocatorStrategyBuilder.buildStrategies(locators, platform)
