@@ -4,7 +4,7 @@ import com.kms.katalon.core.configuration.RunConfiguration
 
 
 public class MobileDriverHelper {
-	
+
 	static def getDeviceOS() {
 		def executionProperties = RunConfiguration.getExecutionProperties()
 		if (executionProperties.containsKey('drivers')) {

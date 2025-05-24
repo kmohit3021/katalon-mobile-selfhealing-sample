@@ -47,7 +47,7 @@
       </entry>
       <entry>
          <key>ANDROID_UI_AUTOMATOR</key>
-         <value>new UiSelector().mohit</value>
+         <value>new UiSelector()</value>
       </entry>
       <entry>
          <key>ATTRIBUTES</key>

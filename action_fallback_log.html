@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Healing Insight Log</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f5f5f5; padding: 20px; }
+        h2 { color: #333; }
+        table { width: 100%; border-collapse: collapse; background: white; }
+        th, td { padding: 10px; border: 1px solid #ccc; text-align: left; }
+        th { background-color: #007BFF; color: white; }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <h2>Healing Insight Log</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>Object ID</th>
+                <th>Broken Locator</th>
+                <th>Proposed Locator</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        <tr>
+            <td>2025-05-24 17:36:47</td>
+            <td>Mobile/APIDemos/android.widget.TextView - restattributeBlankvalue</td>
+            <td>//*[@class = 'android.widget.TextView' and (@text = '' or . = '')]</td>
+            <td>AppiumBy.androidUIAutomator: new UiSelector().className("android.widget.TextView").text("API Demos").resourceId("android:id/text1").packageName("com.touchboarder.android.api.demos").enabled(true).clickable(true).longClickable(false).checkable(false).checked(false).focusable(false).focused(false).scrollable(false).selected(false).index(1)</td>
+        </tr>
+
+        <tr>
+            <td>2025-05-24 17:38:20</td>
+            <td>Mobile/APIDemos/android.widget.TextView - API Demos</td>
+            <td>//*[@class = 'android.widget.TextView' and (@text = 'Mohit Demos' or . = 'Mohit Demos') and @resource-id = 'android:id/text1']</td>
+            <td>AppiumBy.androidUIAutomator: new UiSelector().className("android.widget.TextView").text("API Demos").resourceId("android:id/text1").packageName("com.touchboarder.android.api.demos").enabled(true).clickable(true).longClickable(false).checkable(false).checked(false).focusable(false).focused(false).scrollable(false).selected(false).index(1)</td>
+        </tr>
+
+        <tr>
+            <td>2025-05-24 17:39:24</td>
+            <td>Mobile/APIDemos/android.widget.EditText</td>
+            <td>//*[@class = 'android.widget.EditText' and @resource-id = 'com.touchboarder.android.api.demos:id/plaintext_Mohit' and (@text = '' or . = '')]</td>
+            <td>By.xpath: //hierarchy/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.RelativeLayout[2]/android.widget.EditText[1]</td>
+        </tr>

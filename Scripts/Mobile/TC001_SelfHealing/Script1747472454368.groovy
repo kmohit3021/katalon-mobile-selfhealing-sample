@@ -18,6 +18,7 @@ import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords as WebUI
 import com.kms.katalon.core.windows.keyword.WindowsBuiltinKeywords as Windows
 import internal.GlobalVariable as GlobalVariable
 import mk.katalon.helpers.FailureHandler as FailureHandler
+import mk.katalon.helpers.HealingInsightHelper as HealingInsightHelper
 import org.openqa.selenium.Keys as Keys
 
 Mobile.startApplication('/Users/mohit/Documents/APK/APIDemos2.apk', true)
@@ -26,7 +27,11 @@ CustomKeywords.'MobileHelper.tap'(findTestObject('Object Repository/Mobile/APIDe
 
 CustomKeywords.'MobileHelper.tap'(findTestObject('Object Repository/Mobile/APIDemos/android.widget.TextView - OK'), 0)
 
-CustomKeywords.'MobileHelper.tap'(findTestObject('Mobile/APIDemos/Object Healing Mobile'), 0, FailureHandling.CONTINUE_ON_FAILURE)
+not_run: CustomKeywords.'MobileHelper.tap'(findTestObject('Mobile/APIDemos/Object Healing Mobile'), 0, FailureHandling.CONTINUE_ON_FAILURE)
+
+CustomKeywords.'MobileHelper.tap'(findTestObject('Mobile/APIDemos/android.widget.TextView - restattributeBlankvalue'), 0)
+
+Mobile.pressBack()
 
 CustomKeywords.'MobileHelper.tap'(findTestObject('Object Repository/Mobile/APIDemos/android.widget.TextView - API Demos'), 
     0)

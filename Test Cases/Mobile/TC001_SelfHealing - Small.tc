@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TestCaseEntity>
+   <description></description>
+   <name>TC001_SelfHealing - Small</name>
+   <tag></tag>
+   <comment></comment>
+   <recordOption>OTHER</recordOption>
+   <testCaseGuid>526bca00-49d3-4261-b9c4-66fe5359ce4f</testCaseGuid>
+</TestCaseEntity>

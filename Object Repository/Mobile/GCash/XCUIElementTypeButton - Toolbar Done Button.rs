@@ -95,7 +95,7 @@
       <value>//XCUIElementTypeApplication/XCUIElementTypeWindow[2]/XCUIElementTypeOther[1]/XCUIElementTypeOther[2]/XCUIElementTypeToolbar[1]/XCUIElementTypeOther[1]/XCUIElementTypeOther[1]/XCUIElementTypeButton[1]</value>
       <webElementGuid>0dd12232-20a0-4fb5-86c9-27e1012f01d5</webElementGuid>
    </webElementProperties>
-   <locator>//*[@type = 'XCUIElementTypeButton' and @label = 'Toolbar Done Button' and @name = 'Toolbar Done Button']</locator>
+   <locator>//*[@type = 'XCUIElementTypeButton' and @label = 'Toolbar Done Button Mohit' and @name = 'Toolbar Done Button']</locator>
    <locatorCollection>
       <entry>
          <key>CLASS_NAME</key>
@@ -131,7 +131,7 @@
       </entry>
       <entry>
          <key>ATTRIBUTES</key>
-         <value>//*[@type = 'XCUIElementTypeButton' and @label = 'Toolbar Done Button' and @name = 'Toolbar Done Button']</value>
+         <value>//*[@type = 'XCUIElementTypeButton' and @label = 'Toolbar Done Button mohit' and @name = 'Toolbar Done Button']</value>
       </entry>
       <entry>
          <key>IMAGE</key>
@@ -143,7 +143,7 @@
       </entry>
       <entry>
          <key>XPATH</key>
-         <value>//XCUIElementTypeApplication/XCUIElementTypeWindow[2]/XCUIElementTypeOther[1]/XCUIElementTypeOther[2]/XCUIElementTypeToolbar[1]/XCUIElementTypeOther[1]/XCUIElementTypeOther[1]/XCUIElementTypeButton[1]</value>
+         <value>//XCUIElementTypeApplication/mohit/XCUIElementTypeWindow[2]/XCUIElementTypeOther[1]/XCUIElementTypeOther[2]/XCUIElementTypeToolbar[1]/XCUIElementTypeOther[1]/XCUIElementTypeOther[1]/XCUIElementTypeButton[1]</value>
       </entry>
    </locatorCollection>
    <locatorStrategy>ATTRIBUTES</locatorStrategy>

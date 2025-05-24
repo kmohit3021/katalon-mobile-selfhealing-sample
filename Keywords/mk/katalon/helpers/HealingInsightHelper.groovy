@@ -1,47 +1,87 @@
 package mk.katalon.helpers
 
-
-import static com.kms.katalon.core.model.FailureHandling.STOP_ON_FAILURE
-import static com.kms.katalon.core.testobject.ObjectRepository.findTestObject
+import com.kms.katalon.core.configuration.RunConfiguration
+import com.kms.katalon.core.util.KeywordUtil
 
 import java.nio.file.*
-
-import org.openqa.selenium.Keys
-import org.openqa.selenium.WebElement
-
-import com.kms.katalon.core.configuration.RunConfiguration
-import com.kms.katalon.core.exception.StepFailedException
-import com.kms.katalon.core.model.FailureHandling
-import com.kms.katalon.core.testobject.ConditionType
-import com.kms.katalon.core.testobject.TestObject
-import com.kms.katalon.core.util.KeywordUtil
-import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords as WebUI
-
-import internal.GlobalVariable
-
+import java.text.SimpleDateFormat
 
 public class HealingInsightHelper {
 
-	private static final String CLICK_LOG_FILE_PATH = RunConfiguration.getProjectDir() + "/action_fallback_log.txt"
+	private static final String LOG_FILE_NAME = "action_fallback_log.html"
+	private static final String LOG_FILE_PATH = RunConfiguration.getProjectDir() + "/" + LOG_FILE_NAME
+	private static boolean headerWritten = false
 
-	private static void logActionFailure(String testObjectPath, String preferredMethod, String workingMethod) {
+	private static String getCurrentTimestamp() {
+		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())
+	}
+
+	private static void ensureHeaderExists() {
+		Path logFilePath = Paths.get(LOG_FILE_PATH)
+		if (!Files.exists(logFilePath)) {
+			String header = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Healing Insight Log</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f5f5f5; padding: 20px; }
+        h2 { color: #333; }
+        table { width: 100%; border-collapse: collapse; background: white; }
+        th, td { padding: 10px; border: 1px solid #ccc; text-align: left; }
+        th { background-color: #007BFF; color: white; }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <h2>Healing Insight Log</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>Object ID</th>
+                <th>Broken Locator</th>
+                <th>Proposed Locator</th>
+            </tr>
+        </thead>
+        <tbody>
+"""
+			Files.write(logFilePath, header.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.WRITE)
+			headerWritten = true
+		}
+	}
+
+	private static void appendLogRow(String timestamp, String objectId, String brokenLocator, String proposedLocator) {
+		String row = """
+        <tr>
+            <td>${timestamp}</td>
+            <td>${objectId}</td>
+            <td>${brokenLocator}</td>
+            <td>${proposedLocator}</td>
+        </tr>
+"""
+		Path logFilePath = Paths.get(LOG_FILE_PATH)
+		Files.write(logFilePath, row.getBytes(), StandardOpenOption.APPEND)
+	}
+
+	private static void ensureFooterExists() {
+		Path logFilePath = Paths.get(LOG_FILE_PATH)
+		List<String> lines = Files.readAllLines(logFilePath)
+		if (!lines.any { it.contains("</tbody>") }) {
+			Files.write(logFilePath, "</tbody>\n</table>\n</body>\n</html>".getBytes(), StandardOpenOption.APPEND)
+		}
+	}
+
+	public static void logActionFailure(String testObjectPath, String preferredMethod, String workingMethod) {
 		String formattedPath = testObjectPath.replace("Object Repository/", "")
-		String timestamp = new Date().format("yyyy-MM-dd HH:mm:ss")
-
-		StringBuilder logEntry = new StringBuilder()
-		logEntry.append("${timestamp} | ")
-		//logEntry.append("TestCase: ${GlobalVariable.TestCaseId ?: 'Unknown'} | ")
-		logEntry.append("Object Id: ${formattedPath} | ")
-		logEntry.append("Broken Locator: ${preferredMethod} | ")
-		logEntry.append("Proposed Locator: ${workingMethod}\n")
+		String timestamp = getCurrentTimestamp()
 
 		try {
-			Path logFilePath = Paths.get(CLICK_LOG_FILE_PATH)
-			Files.write(logFilePath, logEntry.toString().getBytes(),
-					StandardOpenOption.CREATE, StandardOpenOption.APPEND)
-			KeywordUtil.logInfo("Logged Action fallback to file")
+			ensureHeaderExists()
+			appendLogRow(timestamp, formattedPath, preferredMethod, workingMethod)
+			KeywordUtil.logInfo("Logged Action fallback to HTML report")
 		} catch (IOException e) {
-			KeywordUtil.markWarning("Failed to log Action failure: " + e.getMessage())
+			KeywordUtil.markWarning("Failed to log action failure to HTML: " + e.getMessage())
 		}
 	}
 }

@@ -47,27 +47,37 @@ class MobileHelper {
 		//def platform = MobileDriverFactory.getDevicePlatform()
 		def platform = MobileDriverHelper.getDeviceOS()
 		AppiumDriver driver = MobileDriverFactory.getDriver()
+		def weakLocator = MobileElementFinder.isWeakDefaultLocator(to)
 		def locators = MobileElementFinder.extractLocatorsFromTestObject(to)
-		def strategies = LocatorStrategyBuilder.buildStrategies(locators, platform)
+		Map<String, String> attributes = MobileElementFinder.getAttributeValues(to)
+		def strategies = LocatorStrategyBuilder.buildStrategies(locators, platform, attributes)
 
 		// First, try default Katalon action
-		try {
-			switch (action) {
-				case 'tap':
-					Mobile.tap(to, timeout)
-					break
-				case 'setText':
-					Mobile.setText(to, text, timeout)
-					break
-				case 'sendKeys':
-					Mobile.sendKeys(to, text, timeout)
-					break
+		if(!weakLocator) {
+			try {
+				switch (action) {
+
+					case 'tap':
+						Mobile.tap(to, timeout)
+						break
+					case 'setText':
+						Mobile.setText(to, text, timeout)
+						break
+					case 'sendKeys':
+						Mobile.sendKeys(to, text, timeout)
+						break
+				}
+				success = true
+			} catch (Exception e) {
+				MobileTestObject testobject= to
+				defaultLocator = testobject.getMobileLocator()
+				KeywordUtil.logInfo("Default method failed to interact with the object.")
 			}
-			success = true
-		} catch (Exception e) {
+		}
+		else {
 			MobileTestObject testobject= to
 			defaultLocator = testobject.getMobileLocator()
-			KeywordUtil.logInfo("Default method failed to interact with the object.")
+			KeywordUtil.logInfo("Avoid using default locator—it's unreliable and may cause false positives.")
 		}
 
 		// If Katalon default fails, retry with other strategies
@@ -84,6 +94,7 @@ class MobileHelper {
 							element.sendKeys(text)
 							break
 					}
+
 					proposedLocator = strategy.toString()
 					success = true
 					KeywordUtil.logInfo("Succeeded with: ${strategy}")
