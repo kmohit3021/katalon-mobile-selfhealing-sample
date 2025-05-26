@@ -86,29 +86,83 @@ class MobileElementFinder {
 	}
 
 	static String getBestStableSubstringFromText(String input) {
-		// Define known dynamic patterns (e.g., prices, dates, numbers, UUIDs)
-		def dynamicPatterns = [
-			~/^₹?\d+(\.\d{2})?$/,
-			// Price like ₹49.00
-			~/^\d+$/,
-			// Just numbers
-			~/\b(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4})\b/,
-			// Date
-			~/\b(\d{1,2}:\d{2}(:\d{2})?)\b/,
-			// Time
-			~/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/,
-			// UUID
-			~/^\s*$/,                                       // Empty or whitespace
-		]
+		// Check if the given text is a price
+		def isPrice = { str ->
+			str = str?.trim()
+			if (!str) return false
+			str = str.replace("₹", "")
+			try {
+				str.toBigDecimal()
+				return true
+			} catch (Exception e) {
+				return false
+			}
+		}
+
+		// Check if the string is an integer
+		def isInteger = { str ->
+			try {
+				str?.toInteger()
+				return true
+			} catch (Exception e) {
+				return false
+			}
+		}
+
+		// Check if the string is a date
+		def isDate = { str ->
+			def formats = [
+				'dd/MM/yyyy',
+				'MM-dd-yyyy',
+				'd/M/yy',
+				'dd-MM-yyyy',
+				'MM/dd/yyyy'
+			]
+			for (f in formats) {
+				try {
+					def sdf = new java.text.SimpleDateFormat(f)
+					sdf.setLenient(false)
+					sdf.parse(str)
+					return true
+				} catch (Exception ignored) {}
+			}
+			return false
+		}
+
+		// Check if the string is a time
+		def isTime = { str ->
+			def formats = ['HH:mm', 'HH:mm:ss', 'h:mm a']
+			for (f in formats) {
+				try {
+					def sdf = new java.text.SimpleDateFormat(f)
+					sdf.setLenient(false)
+					sdf.parse(str)
+					return true
+				} catch (Exception ignored) {}
+			}
+			return false
+		}
+
+		// Check if the string is a UUID
+		def isUUID = { str ->
+			try {
+				UUID.fromString(str)
+				return true
+			} catch (Exception e) {
+				return false
+			}
+		}
+
+		// Check if the string is blank or whitespace
+		def isBlank = { str ->
+			str?.trim().isEmpty()
+		}
 
 		// Identify if a given text is dynamic
 		def isTextDynamic = { String text ->
 			text = text.trim()
-			if (text.length() < 5 && !text.matches(/.*[a-zA-Z].*/)) return true
-
-			for (pattern in dynamicPatterns) {
-				if (text ==~ pattern) return true
-			}
+			if (text.length() < 5 && !text.any { Character.isLetter(it as char) }) return true
+			if (isBlank(text) || isPrice(text) || isInteger(text) || isDate(text) || isTime(text) || isUUID(text)) return true
 
 			// If numeric characters dominate, it's likely dynamic
 			def letters = text.findAll { Character.isLetter(it as char) }.size()
@@ -128,7 +182,7 @@ class MobileElementFinder {
 			int score = 0
 			if (!text.contains('"') && !text.contains("'")) score += 2
 			if (text.length() > 15) score += 2
-			if (text.matches(/.*[a-zA-Z].*/)) score += 3
+			if (text.any { Character.isLetter(it as char) }) score += 3
 			return score
 		}
 
@@ -138,7 +192,8 @@ class MobileElementFinder {
 
 		return best?.text
 	}
-	
+
+
 
 	/**
 	 * Reads and parses the XML content of the .rs file for a given TestObject.
